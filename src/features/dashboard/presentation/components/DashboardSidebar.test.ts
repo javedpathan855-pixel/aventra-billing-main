@@ -143,13 +143,24 @@ describe("DashboardSidebar", () => {
       expect(html).toContain('aria-label="Products &amp; Services navigation"');
       expect(html).toContain('href="/products"');
       expect(html).toContain('href="/services"');
+      expect(html).toContain('href="/categories"');
+      expect(html).toContain('href="/units"');
+      expect(html).toContain('href="/pricing"');
+      expect(html).toContain('href="/hsn-sac"');
       expect(html).toContain("Products");
       expect(html).toContain("Services");
-      expect(html).not.toContain("Categories");
+      expect(html).toContain("Categories");
 
-      // Products is active (index 0), Services is neighbor (index 1)
+      // Products is active (index 0), Services is neighbor (index 1), followed by categories (dist 2), units (dist 3), pricing (dist 4), hsn-sac (dist 5)
       const opacities = [...html.matchAll(/(?<=[\s"'])opacity-(100|75|50|40)/g)].map((m) => m[0]);
-      expect(opacities).toEqual(["opacity-100", "opacity-75"]);
+      expect(opacities).toEqual([
+        "opacity-100",
+        "opacity-75",
+        "opacity-50",
+        "opacity-40",
+        "opacity-40",
+        "opacity-40",
+      ]);
     });
 
     it("renders Products & Services category with Services active on /services/new", () => {
@@ -163,9 +174,16 @@ describe("DashboardSidebar", () => {
       expect(html).toContain("text-primary-light");
       expect(html).toContain("text-text-primary");
 
-      // Services is active (index 1), Products is neighbor (index 0)
+      // Services is active (index 1), Products is neighbor (index 0), Categories is neighbor (index 2)
       const opacities = [...html.matchAll(/(?<=[\s"'])opacity-(100|75|50|40)/g)].map((m) => m[0]);
-      expect(opacities).toEqual(["opacity-75", "opacity-100"]);
+      expect(opacities).toEqual([
+        "opacity-75",
+        "opacity-100",
+        "opacity-75",
+        "opacity-50",
+        "opacity-40",
+        "opacity-40",
+      ]);
     });
 
     it("renders Organization & Team category correctly on /organization", () => {

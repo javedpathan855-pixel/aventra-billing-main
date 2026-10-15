@@ -48,6 +48,7 @@ export type ProductFilterInput = {
   type?: ProductType | "ALL";
   status?: ProductStatus | "ALL";
   category?: string | "ALL";
+  unit?: string;
   query?: string;
   limit?: number;
   offset?: number;

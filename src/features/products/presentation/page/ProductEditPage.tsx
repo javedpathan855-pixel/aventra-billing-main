@@ -7,9 +7,15 @@ import { ProductForm } from "../forms/ProductForm";
 
 export type ProductEditPageProps = {
   product: ProductDto;
+  categoryOptions?: string[];
+  unitOptions?: string[];
 };
 
-export const ProductEditPage = ({ product }: ProductEditPageProps) => {
+export const ProductEditPage = ({
+  product,
+  categoryOptions = [],
+  unitOptions = [],
+}: ProductEditPageProps) => {
   const isService = product.type === "SERVICE";
   const backHref = isService ? `/services/${product.id}` : `/products/${product.id}`;
   const title = isService ? `Edit Service` : `Edit Product`;
@@ -34,7 +40,13 @@ export const ProductEditPage = ({ product }: ProductEditPageProps) => {
       </div>
 
       {/* Main form */}
-      <ProductForm initialData={product} isEdit={true} defaultType={product.type} />
+      <ProductForm
+        initialData={product}
+        isEdit={true}
+        defaultType={product.type}
+        categoryOptions={categoryOptions}
+        unitOptions={unitOptions}
+      />
     </div>
   );
 };

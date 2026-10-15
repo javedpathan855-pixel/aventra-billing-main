@@ -48,6 +48,7 @@ export const SalesOrderItemsSection = ({
         item: "",
         description: "",
         hsnSac: "",
+        unit: "",
         unitPrice: 0,
         taxRate: 18,
       });
@@ -62,6 +63,7 @@ export const SalesOrderItemsSection = ({
           item: realItem.name,
           description: realItem.description || realItem.name,
           hsnSac: realItem.hsnSac || "",
+          unit: realItem.unit || "",
           unitPrice: realItem.sellingPrice,
           taxRate: realItem.taxRate,
         });
@@ -233,6 +235,11 @@ export const SalesOrderItemsSection = ({
                         qtyError ? "border-danger focus:border-danger" : ""
                       }`}
                     />
+                    {line.unit ? (
+                      <span className="block mt-0.5 text-[10px] text-right font-mono text-text-muted">
+                        {line.unit}
+                      </span>
+                    ) : null}
                     {qtyError && (
                       <p className="mt-1 text-[11px] text-danger">{qtyError}</p>
                     )}

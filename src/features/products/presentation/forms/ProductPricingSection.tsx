@@ -4,6 +4,7 @@ import { CircleDollarSign } from "lucide-react";
 import { Input, Label, Select } from "@/shared/components/form";
 import type { ProductType } from "../../domain/entities/product";
 import { STANDARD_UNITS } from "../../domain/rules/product-rules";
+import { SUPPORTED_PRICE_CURRENCIES } from "@/features/pricing/domain/rules/pricing-rules";
 
 export type ProductPricingSectionProps = {
   type: ProductType;
@@ -15,17 +16,12 @@ export type ProductPricingSectionProps = {
   onCurrencyChange: (val: string) => void;
   unit: string;
   onUnitChange: (val: string) => void;
+  /** Active master unit codes; falls back to the legacy standards. */
+  unitOptions?: string[];
   errors?: Record<string, string>;
 };
 
-const currencyOptions = [
-  { value: "INR (₹)", label: "INR (₹)" },
-  { value: "USD ($)", label: "USD ($)" },
-  { value: "EUR (€)", label: "EUR (€)" },
-  { value: "GBP (£)", label: "GBP (£)" },
-];
-
-const unitOptions = STANDARD_UNITS.map((u) => ({ value: u, label: u }));
+const currencyOptions = SUPPORTED_PRICE_CURRENCIES.map((c) => ({ value: c, label: c }));
 
 export const ProductPricingSection = ({
   type,
@@ -37,8 +33,16 @@ export const ProductPricingSection = ({
   onCurrencyChange,
   unit,
   onUnitChange,
+  unitOptions,
   errors = {},
 }: ProductPricingSectionProps) => {
+  const masterCodes =
+    unitOptions && unitOptions.length > 0 ? unitOptions : [...STANDARD_UNITS];
+  const unitSelectOptions = [
+    ...masterCodes.map((u) => ({ value: u, label: u })),
+    // Preserve values stored before master adoption so they stay visible.
+    ...(unit && !masterCodes.includes(unit) ? [{ value: unit, label: unit }] : []),
+  ];
   return (
     <section className="rounded-xl border border-border bg-surface-card p-5 sm:p-6">
       <div className="flex items-center gap-3 border-b border-border/60 pb-4">
@@ -130,7 +134,7 @@ export const ProductPricingSection = ({
             id="unit"
             value={unit}
             onChange={onUnitChange}
-            options={unitOptions}
+            options={unitSelectOptions}
             className="h-10 text-sm"
           />
           {errors.unit && (

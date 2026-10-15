@@ -48,6 +48,7 @@ export const EstimateItemsSection = ({
         item: "",
         description: "",
         hsnSac: "",
+        unit: "",
         unitPrice: 0,
         taxRate: 18,
       });
@@ -62,6 +63,7 @@ export const EstimateItemsSection = ({
           item: realItem.name,
           description: realItem.description || realItem.name,
           hsnSac: realItem.hsnSac || "",
+          unit: realItem.unit || "",
           unitPrice: realItem.sellingPrice,
           taxRate: realItem.taxRate,
         });
@@ -248,6 +250,11 @@ export const EstimateItemsSection = ({
                       }
                       className="h-9 px-2 text-center text-xs"
                     />
+                    {line.unit ? (
+                      <span className="block mt-0.5 text-[10px] text-center font-mono text-text-muted">
+                        {line.unit}
+                      </span>
+                    ) : null}
                     {(errors[`quantity-${index}`] || errors[`items.${index}.quantity`]) && (
                       <p className="mt-1 text-[11px] text-danger" role="alert">
                         {errors[`quantity-${index}`] || errors[`items.${index}.quantity`]}

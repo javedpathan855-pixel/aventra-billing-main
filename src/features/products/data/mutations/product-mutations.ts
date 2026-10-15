@@ -2,9 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { isOrganizationAdmin } from "@/features/auth";
+import { normalizeHsnSacCode } from "@/features/hsn-sac-mapping/domain/entities/hsn-sac-code";
 import { resolveProductContext } from "../context/product-context";
 import { productRepository } from "../../infrastructure/repositories/prisma-product-repository";
 import { createProductSchema, updateProductSchema } from "../validators/product-schemas";
+import { validateCatalogueReferences } from "../validators/catalogue-reference-validation";
 import { toProductDto } from "../mappers/product-mappers";
 import type {
   ProductActionResult,
@@ -35,6 +37,20 @@ export const createProductAction = async (
     const { organizationId } = await resolveProductContext();
     const data = parseResult.data;
 
+    const referenceErrors = await validateCatalogueReferences(organizationId, {
+      type: data.type,
+      category: data.category,
+      unit: data.unit,
+      hsnSac: data.hsnSac,
+    });
+    if (Object.keys(referenceErrors).length > 0) {
+      return {
+        success: false,
+        error: "Validation failed. Please review the highlighted fields.",
+        fieldErrors: referenceErrors,
+      };
+    }
+
     const newProduct: Product = {
       id: `prod_${crypto.randomUUID()}`,
       organizationId,
@@ -48,7 +64,7 @@ export const createProductAction = async (
       purchasePrice: data.purchasePrice ?? null,
       currency: data.currency,
       unit: data.unit,
-      hsnSac: data.hsnSac ?? null,
+      hsnSac: data.hsnSac ? normalizeHsnSacCode(data.hsnSac) : null,
       taxRate: data.taxRate,
       taxPreference: data.taxPreference,
       // Services must not track inventory
@@ -100,6 +116,47 @@ export const updateProductAction = async (
     const { organizationId } = await resolveProductContext();
     const data = parseResult.data;
 
+    if (
+      data.type !== undefined ||
+      data.category !== undefined ||
+      data.unit !== undefined ||
+      data.hsnSac !== undefined
+    ) {
+      // Re-validate carried-over references when the item type changes,
+      // otherwise validate only the patched references.
+      let refs: { type: "PRODUCT" | "SERVICE"; category?: string | null; unit?: string | null; hsnSac?: string | null };
+      if (data.type !== undefined) {
+        const existing = await productRepository.findById(organizationId, id);
+        if (!existing) {
+          return { success: false, error: `Product with ID "${id}" was not found.` };
+        }
+        refs = {
+          type: data.type,
+          category: data.category !== undefined ? data.category : existing.category,
+          unit: data.unit !== undefined ? data.unit : existing.unit,
+          hsnSac: data.hsnSac !== undefined ? data.hsnSac : existing.hsnSac,
+        };
+      } else {
+        let effectiveType: "PRODUCT" | "SERVICE" = "PRODUCT";
+        if (data.hsnSac !== undefined && data.hsnSac !== null) {
+          const existing = await productRepository.findById(organizationId, id);
+          if (!existing) {
+            return { success: false, error: `Product with ID "${id}" was not found.` };
+          }
+          effectiveType = existing.type;
+        }
+        refs = { type: effectiveType, category: data.category, unit: data.unit, hsnSac: data.hsnSac };
+      }
+      const referenceErrors = await validateCatalogueReferences(organizationId, refs);
+      if (Object.keys(referenceErrors).length > 0) {
+        return {
+          success: false,
+          error: "Validation failed. Please review the highlighted fields.",
+          fieldErrors: referenceErrors,
+        };
+      }
+    }
+
     const patch: Partial<Product> = {};
     if (data.name !== undefined) patch.name = data.name;
     if (data.type !== undefined) patch.type = data.type;
@@ -111,7 +168,9 @@ export const updateProductAction = async (
     if (data.purchasePrice !== undefined) patch.purchasePrice = data.purchasePrice ?? null;
     if (data.currency !== undefined) patch.currency = data.currency;
     if (data.unit !== undefined) patch.unit = data.unit;
-    if (data.hsnSac !== undefined) patch.hsnSac = data.hsnSac ?? null;
+    if (data.hsnSac !== undefined) {
+      patch.hsnSac = data.hsnSac && data.hsnSac.trim().length > 0 ? normalizeHsnSacCode(data.hsnSac) : null;
+    }
     if (data.taxRate !== undefined) patch.taxRate = data.taxRate;
     if (data.taxPreference !== undefined) patch.taxPreference = data.taxPreference;
     if (data.trackInventory !== undefined) {

@@ -14,11 +14,13 @@ const PAGE_SIZE = 10;
 export type ProductListPageProps = {
   initialProducts?: ProductDto[];
   itemType?: ProductType;
+  categoryOptions?: string[];
 };
 
 export const ProductListPage = ({
   initialProducts = [],
   itemType,
+  categoryOptions = [],
 }: ProductListPageProps) => {
   const isServicesPage = itemType === "SERVICE";
   const basePath = isServicesPage ? "/services" : "/products";
@@ -143,6 +145,7 @@ export const ProductListPage = ({
         showTypeFilter={!itemType}
         category={category}
         onCategoryChange={handleCategoryChange}
+        categoryOptions={categoryOptions}
         status={status}
         onStatusChange={handleStatusChange}
         onReset={handleResetFilters}

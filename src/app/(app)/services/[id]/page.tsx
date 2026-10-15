@@ -4,11 +4,11 @@ import { ProductDetailPage } from "@/features/products/presentation/page/Product
 
 export const dynamic = "force-dynamic";
 
-export default async function ServiceDetailsPage({
+const ServiceDetailsPage = async ({
   params,
 }: {
   params: Promise<{ id: string }> | { id: string };
-}) {
+}) => {
   const resolvedParams = await params;
   const product = await getProductById(resolvedParams.id);
 
@@ -17,4 +17,6 @@ export default async function ServiceDetailsPage({
   }
 
   return <ProductDetailPage product={product} />;
-}
+};
+
+export default ServiceDetailsPage;

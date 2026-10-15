@@ -9,6 +9,7 @@ export const salesOrderItemSchema = z.object({
     .max(255, "Item name cannot exceed 255 characters."),
   description: z.string().trim().max(1000).optional().nullable(),
   hsnSac: z.string().trim().max(20).optional().nullable(),
+  unit: z.string().trim().max(50).optional().nullable(),
   quantity: z.coerce
     .number()
     .gt(0, "Quantity must be greater than zero."),

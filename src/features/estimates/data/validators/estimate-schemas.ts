@@ -6,6 +6,7 @@ export const estimateLineItemSchema = z.object({
   item: z.string().trim().min(1, "Item or service name is required."),
   description: z.string().optional().default(""),
   hsnSac: z.string().trim().optional(),
+  unit: z.string().trim().optional(),
   quantity: z.coerce
     .number()
     .finite("Quantity must be a valid number.")

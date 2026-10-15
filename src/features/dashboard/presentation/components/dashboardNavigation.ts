@@ -47,7 +47,17 @@ export type DashboardNavigationHref =
   | "/delivery-challans"
   | "/settings/billing"
   | "/settings/sales"
-  | "/suppliers";
+  | "/settings/purchases"
+  | "/suppliers"
+  | "/purchase-orders"
+  | "/purchase-bills"
+  | "/purchase-returns"
+  | "/supplier-payments"
+  | "/purchase-reports"
+  | "/categories"
+  | "/units"
+  | "/pricing"
+  | "/hsn-sac";
 export type DashboardNavigationAvailability = "available" | "planned";
 
 type DashboardNavigationBase = {
@@ -119,11 +129,11 @@ export const dashboardNavigationSections = [
     label: "Purchases",
     items: [
       available({ description: "Maintain supplier and vendor information.", href: "/suppliers", icon: Truck, id: "purchases-suppliers", label: "Suppliers", title: "Suppliers" }),
-      planned({ description: "Create and track orders placed with suppliers.", icon: ShoppingCart, id: "purchases-orders", label: "Purchase orders", title: "Purchase Orders" }),
-      planned({ description: "Review and manage bills received from suppliers.", icon: ClipboardList, id: "purchases-bills", label: "Purchase bills", title: "Purchase Bills" }),
-      planned({ description: "Record goods or services returned to suppliers.", icon: ReceiptText, id: "purchases-returns", label: "Purchase returns", title: "Purchase Returns" }),
-      planned({ description: "Track outstanding supplier balances and payments.", icon: WalletCards, id: "purchases-payments", label: "Supplier payments", title: "Supplier Payments" }),
-      planned({ description: "Analyze purchasing activity and supplier spending.", icon: BarChart3, id: "purchases-reports", label: "Purchase reports", title: "Purchase Reports" }),
+      available({ description: "Create and track orders placed with suppliers.", href: "/purchase-orders", icon: ShoppingCart, id: "purchases-orders", label: "Purchase orders", title: "Purchase Orders" }),
+      available({ description: "Review and manage bills received from suppliers.", href: "/purchase-bills", icon: ClipboardList, id: "purchases-bills", label: "Purchase bills", title: "Purchase Bills" }),
+      available({ description: "Record goods or services returned to suppliers.", href: "/purchase-returns", icon: ReceiptText, id: "purchases-returns", label: "Purchase returns", title: "Purchase Returns" }),
+      available({ description: "Track outstanding supplier balances and payments.", href: "/supplier-payments", icon: WalletCards, id: "purchases-payments", label: "Supplier payments", title: "Supplier Payments" }),
+      available({ description: "Analyze purchasing activity and supplier spending.", href: "/purchase-reports", icon: BarChart3, id: "purchases-reports", label: "Purchase reports", title: "Purchase Reports" }),
     ],
   },
   {
@@ -155,10 +165,10 @@ export const dashboardNavigationSections = [
     items: [
       available({ description: "Maintain products, descriptions, and applicable prices.", href: "/products", icon: Package, id: "products-products", label: "Products", title: "Products" }),
       available({ description: "Maintain services offered to customers.", href: "/services", icon: Handshake, id: "products-services", label: "Services", title: "Services" }),
-      planned({ description: "Organize products and services into categories.", icon: Tags, id: "products-categories", label: "Categories", title: "Categories" }),
-      planned({ description: "Manage supported units for quantities and billing.", icon: Boxes, id: "products-units", label: "Units of measurement", title: "Units of Measurement" }),
-      planned({ description: "Manage product and service pricing information.", icon: CircleDollarSign, id: "products-pricing", label: "Pricing", title: "Pricing" }),
-      planned({ description: "Configure supported tax classification for products and services.", icon: Tags, id: "products-hsn-sac-mapping", label: "HSN / SAC mapping", title: "HSN / SAC Mapping" }),
+      available({ description: "Organize products and services into categories.", href: "/categories", icon: Tags, id: "products-categories", label: "Categories", title: "Categories" }),
+      available({ description: "Manage supported units for quantities and billing.", href: "/units", icon: Boxes, id: "products-units", label: "Units of measurement", title: "Units of Measurement" }),
+      available({ description: "Manage product and service pricing information.", href: "/pricing", icon: CircleDollarSign, id: "products-pricing", label: "Pricing", title: "Pricing" }),
+      available({ description: "Configure supported tax classification for products and services.", href: "/hsn-sac", icon: Tags, id: "products-hsn-sac-mapping", label: "HSN / SAC mapping", title: "HSN / SAC Mapping" }),
     ],
   },
   {
@@ -226,6 +236,7 @@ export const dashboardNavigationSections = [
     items: [
       available({ description: "Configure invoice numbering, defaults, and billing preferences.", href: "/settings/billing", icon: Settings2, id: "settings-billing", label: "Billing settings", title: "Billing Settings" }),
       available({ description: "Configure quotation numbering, defaults, and sales preferences.", href: "/settings/sales", icon: ReceiptText, id: "settings-sales", label: "Sales settings", title: "Sales Settings" }),
+      available({ description: "Configure purchase order numbering, defaults, and procurement preferences.", href: "/settings/purchases", icon: ShoppingCart, id: "settings-purchases", label: "Purchase settings", title: "Purchase Settings" }),
       planned({ description: "Configure available GST and tax preferences.", icon: Percent, id: "settings-tax", label: "Tax settings", title: "Tax Settings" }),
       planned({ description: "Manage inventory preferences, if supported.", icon: Boxes, id: "settings-inventory", label: "Inventory settings", title: "Inventory Settings" }),
       planned({ description: "Configure available notification preferences.", icon: Bell, id: "settings-notifications", label: "Notification settings", title: "Notification Settings" }),

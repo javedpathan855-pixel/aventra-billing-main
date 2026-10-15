@@ -6,6 +6,7 @@ export const invoiceLineItemSchema = z.object({
   item: z.string().trim().min(1, "Item or service name is required."),
   description: z.string().optional().default(""),
   hsnSac: z.string().trim().optional(),
+  unit: z.string().trim().optional(),
   quantity: z.coerce.number().finite("Quantity must be a valid number.").positive("Quantity must be greater than zero."),
   unitPrice: z.coerce.number().finite("Price must be a valid number.").min(0, "Price cannot be negative."),
   discount: z.coerce.number().finite("Discount must be a valid number.").min(0).max(100, "Discount must be between 0 and 100%.").default(0),

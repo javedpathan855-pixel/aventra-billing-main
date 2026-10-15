@@ -6,6 +6,7 @@ export type SaveEstimateItemInput = {
   item: string;
   description?: string | null;
   hsnSac?: string | null;
+  unit?: string | null;
   quantity: number;
   unitPrice: number;
   discount: number;

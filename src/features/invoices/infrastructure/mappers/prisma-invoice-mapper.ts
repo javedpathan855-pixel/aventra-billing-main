@@ -54,6 +54,7 @@ export const toDomainInvoiceLineItem = (item: PrismaInvoiceItem): InvoiceLineIte
   item: item.item,
   description: item.description ?? "",
   hsnSac: item.hsnSac ?? undefined,
+  unit: item.unit ?? undefined,
   quantity: Number(item.quantity),
   unitPrice: Number(item.unitPrice),
   discount: Number(item.discount),
