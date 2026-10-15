@@ -47,6 +47,7 @@ export type CreateSalesOrderInput = {
     item: string;
     description?: string | null;
     hsnSac?: string | null;
+    unit?: string | null;
     quantity: number;
     fulfilledQuantity?: number;
     unitPrice: number;

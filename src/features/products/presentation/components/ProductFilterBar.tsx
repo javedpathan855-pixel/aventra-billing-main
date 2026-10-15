@@ -13,6 +13,8 @@ export type ProductFilterBarProps = {
   showTypeFilter?: boolean;
   category: string | "ALL";
   onCategoryChange: (val: string | "ALL") => void;
+  /** Active master category names; product values present in data are merged in. */
+  categoryOptions?: string[];
   status: ProductStatus | "ALL";
   onStatusChange: (val: ProductStatus | "ALL") => void;
   onReset: () => void;
@@ -30,11 +32,6 @@ const statusOptions = [
   { value: "INACTIVE", label: "Inactive" },
 ];
 
-const categoryOptions = [
-  { value: "ALL", label: "All Categories" },
-  ...STANDARD_CATEGORIES.map((c) => ({ value: c, label: c })),
-];
-
 export const ProductFilterBar = ({
   query,
   onQueryChange,
@@ -43,6 +40,7 @@ export const ProductFilterBar = ({
   showTypeFilter = false,
   category,
   onCategoryChange,
+  categoryOptions,
   status,
   onStatusChange,
   onReset,
@@ -52,6 +50,17 @@ export const ProductFilterBar = ({
     (showTypeFilter && type !== "ALL") ||
     category !== "ALL" ||
     status !== "ALL";
+
+  const masterNames =
+    categoryOptions && categoryOptions.length > 0 ? categoryOptions : [...STANDARD_CATEGORIES];
+  const categorySelectOptions = [
+    { value: "ALL", label: "All Categories" },
+    ...masterNames.map((c) => ({ value: c, label: c })),
+    // Preserve the active filter when it predates master adoption.
+    ...(category !== "ALL" && !masterNames.includes(category)
+      ? [{ value: category, label: category }]
+      : []),
+  ];
 
   return (
     <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface-card p-3 sm:flex-row sm:items-center">
@@ -89,7 +98,7 @@ export const ProductFilterBar = ({
           id="filter-product-category"
           value={category}
           onChange={(val) => onCategoryChange(val as string | "ALL")}
-          options={categoryOptions}
+          options={categorySelectOptions}
           aria-label="Filter by category"
           className="h-10 text-sm"
         />

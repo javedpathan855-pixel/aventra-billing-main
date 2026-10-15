@@ -55,6 +55,10 @@ export class PrismaProductRepository implements IProductRepository {
       where.category = filter.category;
     }
 
+    if (filter?.unit && filter.unit.trim().length > 0) {
+      where.unit = filter.unit.trim();
+    }
+
     if (filter?.query && filter.query.trim().length > 0) {
       const q = filter.query.trim();
       where.OR = [

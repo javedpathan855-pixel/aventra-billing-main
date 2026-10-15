@@ -19,6 +19,10 @@ export type ProductFormProps = {
   isEdit?: boolean;
   defaultType?: ProductType;
   lockType?: boolean;
+  /** Active master category names; empty means the master is not adopted. */
+  categoryOptions?: string[];
+  /** Active master unit codes; empty means the master is not adopted. */
+  unitOptions?: string[];
 };
 
 export const ProductForm = ({
@@ -26,6 +30,8 @@ export const ProductForm = ({
   isEdit = false,
   defaultType = "PRODUCT",
   lockType = false,
+  categoryOptions = [],
+  unitOptions = [],
 }: ProductFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -177,6 +183,7 @@ export const ProductForm = ({
         onSkuChange={setSku}
         category={category}
         onCategoryChange={setCategory}
+        categoryOptions={categoryOptions}
         status={status}
         onStatusChange={setStatus}
         description={description}
@@ -196,6 +203,7 @@ export const ProductForm = ({
         onCurrencyChange={setCurrency}
         unit={unit}
         onUnitChange={setUnit}
+        unitOptions={unitOptions}
         errors={fieldErrors}
       />
 

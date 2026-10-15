@@ -88,6 +88,7 @@ export const productFilterSchema = z.object({
   type: z.enum(["PRODUCT", "SERVICE", "ALL"]).optional(),
   status: z.enum(["ACTIVE", "INACTIVE", "ALL"]).optional(),
   category: z.string().optional(),
+  unit: z.string().optional(),
   query: z.string().optional(),
   limit: z.coerce.number().min(1).max(100).optional(),
   offset: z.coerce.number().min(0).optional(),

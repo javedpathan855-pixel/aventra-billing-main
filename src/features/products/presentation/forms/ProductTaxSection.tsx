@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ReceiptText } from "lucide-react";
 import { Input, Label, Select } from "@/shared/components/form";
 import type { ProductType } from "../../domain/entities/product";
@@ -68,6 +69,12 @@ export const ProductTaxSection = ({
             aria-invalid={Boolean(errors.hsnSac)}
             className="h-10 text-sm"
           />
+          <p className="text-[11px] text-text-muted">
+            {type === "PRODUCT" ? "Products use HSN" : "Services use SAC"} classifications.{" "}
+            <Link href="/hsn-sac" className="font-medium text-primary-light hover:underline">
+              Browse codes
+            </Link>
+          </p>
           {errors.hsnSac && (
             <p className="text-xs text-danger" role="alert">
               {errors.hsnSac}

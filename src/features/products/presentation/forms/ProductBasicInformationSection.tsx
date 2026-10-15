@@ -14,6 +14,8 @@ export type ProductBasicInformationSectionProps = {
   onSkuChange: (val: string) => void;
   category: string;
   onCategoryChange: (val: string) => void;
+  /** Active master category names; falls back to the legacy standards. */
+  categoryOptions?: string[];
   status: ProductStatus;
   onStatusChange: (val: ProductStatus) => void;
   description: string;
@@ -32,11 +34,6 @@ const statusOptions = [
   { value: "INACTIVE", label: "Inactive" },
 ];
 
-const categoryOptions = [
-  { value: "", label: "Select Category..." },
-  ...STANDARD_CATEGORIES.map((cat) => ({ value: cat, label: cat })),
-];
-
 export const ProductBasicInformationSection = ({
   name,
   onNameChange,
@@ -46,6 +43,7 @@ export const ProductBasicInformationSection = ({
   onSkuChange,
   category,
   onCategoryChange,
+  categoryOptions,
   status,
   onStatusChange,
   description,
@@ -53,6 +51,14 @@ export const ProductBasicInformationSection = ({
   lockType = false,
   errors = {},
 }: ProductBasicInformationSectionProps) => {
+  const masterNames =
+    categoryOptions && categoryOptions.length > 0 ? categoryOptions : [...STANDARD_CATEGORIES];
+  const categorySelectOptions = [
+    { value: "", label: "Select Category..." },
+    ...masterNames.map((cat) => ({ value: cat, label: cat })),
+    // Preserve values stored before master adoption so they stay visible.
+    ...(category && !masterNames.includes(category) ? [{ value: category, label: category }] : []),
+  ];
   return (
     <section className="rounded-xl border border-border bg-surface-card p-5 sm:p-6">
       <div className="flex items-center gap-3 border-b border-border/60 pb-4">
@@ -168,7 +174,7 @@ export const ProductBasicInformationSection = ({
             id="item-category"
             value={category}
             onChange={onCategoryChange}
-            options={categoryOptions}
+            options={categorySelectOptions}
             className="h-10 text-sm"
           />
           {errors.category && (

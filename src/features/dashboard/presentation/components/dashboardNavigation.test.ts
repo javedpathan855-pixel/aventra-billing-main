@@ -32,7 +32,7 @@ describe("dashboard mega menu navigation", () => {
 
   it("keeps the finalized item count for each category", () => {
     expect(dashboardNavigationSections.map((section) => section.items.length)).toEqual([
-      3, 6, 5, 6, 4, 10, 6, 7, 5, 8, 9, 6, 8, 5,
+      3, 6, 5, 6, 4, 10, 6, 7, 5, 8, 9, 6, 9, 5,
     ]);
   });
 
@@ -85,28 +85,38 @@ describe("dashboard mega menu navigation", () => {
   it("has exactly the verified active routes", () => {
     const available = items.filter((item) => item.availability === "available");
 
-    expect(available).toHaveLength(18);
+    expect(available).toHaveLength(28);
     expect(available.map((item) => item.href).sort()).toEqual([
+      "/categories",
       "/credit-notes",
       "/customers",
       "/dashboard",
       "/debit-notes",
       "/delivery-challans",
       "/estimates",
+      "/hsn-sac",
       "/invoices",
       "/organization",
       "/payments",
+      "/pricing",
       "/products",
+      "/purchase-bills",
+      "/purchase-orders",
+      "/purchase-reports",
+      "/purchase-returns",
       "/recurring-invoices",
       "/sales-orders",
       "/sales-pipeline",
       "/sales-returns",
       "/services",
       "/settings/billing",
+      "/settings/purchases",
       "/settings/sales",
+      "/supplier-payments",
       "/suppliers",
+      "/units",
     ]);
-    expect(new Set(available.map((item) => item.href)).size).toBe(18);
+    expect(new Set(available.map((item) => item.href)).size).toBe(28);
 
     const customersItem = items.find((item) => item.id === "sales-customers");
     expect(customersItem).toBeDefined();
@@ -170,10 +180,52 @@ describe("dashboard mega menu navigation", () => {
     if (suppliersItem?.availability === "available") {
       expect(suppliersItem.href).toBe("/suppliers");
     }
+
+    const purchaseOrdersItem = items.find((item) => item.id === "purchases-orders");
+    expect(purchaseOrdersItem).toBeDefined();
+    expect(purchaseOrdersItem?.availability).toBe("available");
+    if (purchaseOrdersItem?.availability === "available") {
+      expect(purchaseOrdersItem.href).toBe("/purchase-orders");
+    }
+
+    const purchaseBillsItem = items.find((item) => item.id === "purchases-bills");
+    expect(purchaseBillsItem).toBeDefined();
+    expect(purchaseBillsItem?.availability).toBe("available");
+    if (purchaseBillsItem?.availability === "available") {
+      expect(purchaseBillsItem.href).toBe("/purchase-bills");
+    }
+
+    const purchaseReturnsItem = items.find((item) => item.id === "purchases-returns");
+    expect(purchaseReturnsItem).toBeDefined();
+    expect(purchaseReturnsItem?.availability).toBe("available");
+    if (purchaseReturnsItem?.availability === "available") {
+      expect(purchaseReturnsItem.href).toBe("/purchase-returns");
+    }
+
+    const supplierPaymentsItem = items.find((item) => item.id === "purchases-payments");
+    expect(supplierPaymentsItem).toBeDefined();
+    expect(supplierPaymentsItem?.availability).toBe("available");
+    if (supplierPaymentsItem?.availability === "available") {
+      expect(supplierPaymentsItem.href).toBe("/supplier-payments");
+    }
+
+    const purchaseReportsItem = items.find((item) => item.id === "purchases-reports");
+    expect(purchaseReportsItem).toBeDefined();
+    expect(purchaseReportsItem?.availability).toBe("available");
+    if (purchaseReportsItem?.availability === "available") {
+      expect(purchaseReportsItem.href).toBe("/purchase-reports");
+    }
+
+    const purchaseSettingsItem = items.find((item) => item.id === "settings-purchases");
+    expect(purchaseSettingsItem).toBeDefined();
+    expect(purchaseSettingsItem?.availability).toBe("available");
+    if (purchaseSettingsItem?.availability === "available") {
+      expect(purchaseSettingsItem.href).toBe("/settings/purchases");
+    }
   });
 
   it("contains the complete roadmap item count", () => {
-    expect(items).toHaveLength(88);
+    expect(items).toHaveLength(89);
   });
 });
 
@@ -215,8 +267,16 @@ describe("dashboard sidebar route resolution", () => {
     expect(getSectionForPathname("/sales-orders/so-1")?.label).toBe("Sales");
     expect(getSectionForPathname("/sales-orders/new")?.label).toBe("Sales");
     expect(getSectionForPathname("/products")?.label).toBe("Products & Services");
+    expect(getSectionForPathname("/categories")?.label).toBe("Products & Services");
+    expect(getSectionForPathname("/units")?.label).toBe("Products & Services");
+    expect(getSectionForPathname("/pricing")?.label).toBe("Products & Services");
+    expect(getSectionForPathname("/hsn-sac")?.label).toBe("Products & Services");
     expect(getSectionForPathname("/settings/billing")?.label).toBe("Settings & Integrations");
     expect(getSectionForPathname("/settings/sales")?.label).toBe("Settings & Integrations");
+    expect(getSectionForPathname("/settings/purchases")?.label).toBe("Settings & Integrations");
+    expect(getSectionForPathname("/purchase-orders")?.label).toBe("Purchases");
+    expect(getSectionForPathname("/purchase-orders/po-1")?.label).toBe("Purchases");
+    expect(getSectionForPathname("/purchase-orders/new")?.label).toBe("Purchases");
     expect(getSectionForPathname("/dashboard")?.label).toBe("Dashboard");
   });
 
@@ -254,7 +314,62 @@ describe("dashboard sidebar route resolution", () => {
     expect(getSidebarItems(settings!).map((item) => item.href)).toEqual([
       "/settings/billing",
       "/settings/sales",
+      "/settings/purchases",
     ]);
+
+    const purchases = dashboardNavigationSections.find(
+      (s) => s.label === "Purchases",
+    );
+    expect(purchases).toBeDefined();
+    expect(getSidebarItems(purchases!).map((item) => item.href)).toEqual([
+      "/suppliers",
+      "/purchase-orders",
+      "/purchase-bills",
+      "/purchase-returns",
+      "/supplier-payments",
+      "/purchase-reports",
+    ]);
+
+    const products = dashboardNavigationSections.find(
+      (s) => s.label === "Products & Services",
+    );
+    expect(products).toBeDefined();
+    expect(getSidebarItems(products!).map((item) => item.href)).toEqual([
+      "/products",
+      "/services",
+      "/categories",
+      "/units",
+      "/pricing",
+      "/hsn-sac",
+    ]);
+  });
+
+  it("resolves purchase return, payment, and report routes to the Purchases category", () => {
+    expect(getSectionForPathname("/purchase-returns")?.label).toBe("Purchases");
+    expect(getSectionForPathname("/purchase-returns/prt-1")?.label).toBe(
+      "Purchases",
+    );
+    expect(getSectionForPathname("/purchase-returns/new")?.label).toBe(
+      "Purchases",
+    );
+    expect(getSectionForPathname("/supplier-payments")?.label).toBe("Purchases");
+    expect(getSectionForPathname("/supplier-payments/spay-1")?.label).toBe(
+      "Purchases",
+    );
+    expect(getSectionForPathname("/supplier-payments/new")?.label).toBe(
+      "Purchases",
+    );
+    expect(getSectionForPathname("/purchase-reports")?.label).toBe("Purchases");
+  });
+
+  it("resolves purchase bill routes to the Purchases category", () => {
+    expect(getSectionForPathname("/purchase-bills")?.label).toBe("Purchases");
+    expect(getSectionForPathname("/purchase-bills/pb-1")?.label).toBe(
+      "Purchases",
+    );
+    expect(getSectionForPathname("/purchase-bills/new")?.label).toBe(
+      "Purchases",
+    );
   });
 
   it("steps opacity down with distance and never fades the active item", () => {

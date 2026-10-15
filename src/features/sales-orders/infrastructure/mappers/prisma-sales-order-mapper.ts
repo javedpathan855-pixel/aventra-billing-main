@@ -68,6 +68,7 @@ export const toDomainSalesOrderItem = (
     item: raw.item,
     description: raw.description,
     hsnSac: raw.hsnSac,
+    unit: raw.unit,
     quantity: qty,
     fulfilledQuantity: fulfilled,
     remainingQuantity: Math.max(0, qty - fulfilled),

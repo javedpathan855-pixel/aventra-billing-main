@@ -6,6 +6,7 @@ export type EstimateLineItemInputDto = {
   item: string;
   description?: string;
   hsnSac?: string;
+  unit?: string;
   quantity: number;
   unitPrice: number;
   discount: number;

@@ -19,6 +19,7 @@ export const getProducts = async (
     type: filter?.type,
     status: filter?.status,
     category: filter?.category,
+    unit: filter?.unit,
     query: filter?.query,
     limit: filter?.limit ?? 50,
     offset: filter?.offset ?? 0,

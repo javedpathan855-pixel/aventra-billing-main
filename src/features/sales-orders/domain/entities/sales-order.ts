@@ -12,6 +12,7 @@ export type SalesOrderItem = {
   item: string;
   description?: string | null;
   hsnSac?: string | null;
+  unit?: string | null;
   quantity: number;
   fulfilledQuantity: number;
   remainingQuantity: number;

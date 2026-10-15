@@ -11,6 +11,7 @@ export type InvoiceLineItem = {
   item: string;
   description: string;
   hsnSac?: string;
+  unit?: string;
   quantity: number;
   unitPrice: number;
   discount: number;

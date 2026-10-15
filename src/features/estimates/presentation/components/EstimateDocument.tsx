@@ -112,7 +112,10 @@ export const EstimateDocument = ({
                     </p>
                   )}
                 </td>
-                <td className="py-4 text-right font-mono">{line.quantity}</td>
+                <td className="py-4 text-right font-mono">
+                  {line.quantity}
+                  {line.unit ? ` ${line.unit}` : ""}
+                </td>
                 <td className="py-4 text-right font-mono">
                   {formatCurrency(line.unitPrice)}
                 </td>

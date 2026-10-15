@@ -7,9 +7,15 @@ import { ProductForm } from "../forms/ProductForm";
 
 export type ProductCreatePageProps = {
   type?: ProductType;
+  categoryOptions?: string[];
+  unitOptions?: string[];
 };
 
-export const ProductCreatePage = ({ type = "PRODUCT" }: ProductCreatePageProps) => {
+export const ProductCreatePage = ({
+  type = "PRODUCT",
+  categoryOptions = [],
+  unitOptions = [],
+}: ProductCreatePageProps) => {
   const isService = type === "SERVICE";
   const backHref = isService ? "/services" : "/products";
   const title = isService ? "Add Service" : "Add Product";
@@ -35,7 +41,12 @@ export const ProductCreatePage = ({ type = "PRODUCT" }: ProductCreatePageProps) 
       </div>
 
       {/* Main Form */}
-      <ProductForm defaultType={type} lockType={true} />
+      <ProductForm
+        defaultType={type}
+        lockType={true}
+        categoryOptions={categoryOptions}
+        unitOptions={unitOptions}
+      />
     </div>
   );
 };
