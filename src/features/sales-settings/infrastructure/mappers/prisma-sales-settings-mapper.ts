@@ -1,0 +1,37 @@
+import type { SalesSettings as PrismaSalesSettings } from "@/generated/prisma/client";
+import type { SalesSettings } from "../../domain/entities/sales-settings";
+
+export const toDomainSalesSettings = (
+  raw: PrismaSalesSettings,
+): SalesSettings => ({
+  id: raw.id,
+  organizationId: raw.organizationId,
+  estimatePrefix: raw.estimatePrefix,
+  estimateSuffix: raw.estimateSuffix,
+  estimateNextNumber: raw.estimateNextNumber,
+  estimatePadding: raw.estimatePadding,
+  salesOrderPrefix: raw.salesOrderPrefix,
+  salesOrderSuffix: raw.salesOrderSuffix,
+  salesOrderNextNumber: raw.salesOrderNextNumber,
+  salesOrderPadding: raw.salesOrderPadding,
+  deliveryChallanPrefix: raw.deliveryChallanPrefix,
+  deliveryChallanSuffix: raw.deliveryChallanSuffix,
+  deliveryChallanNextNumber: raw.deliveryChallanNextNumber,
+  deliveryChallanPadding: raw.deliveryChallanPadding,
+  salesReturnPrefix: raw.salesReturnPrefix,
+  salesReturnSuffix: raw.salesReturnSuffix,
+  salesReturnNextNumber: raw.salesReturnNextNumber,
+  salesReturnPadding: raw.salesReturnPadding,
+  defaultValidityDays: raw.defaultValidityDays,
+  defaultDeliveryDays: raw.defaultDeliveryDays,
+  defaultNotes: raw.defaultNotes,
+  defaultTerms: raw.defaultTerms,
+  defaultSalesOrderNotes: raw.defaultSalesOrderNotes,
+  defaultSalesOrderTerms: raw.defaultSalesOrderTerms,
+  defaultDeliveryInstructions: raw.defaultDeliveryInstructions,
+  defaultDeliveryTerms: raw.defaultDeliveryTerms,
+  defaultReturnReason: raw.defaultReturnReason,
+  defaultReturnPolicy: raw.defaultReturnPolicy,
+  createdAt: raw.createdAt,
+  updatedAt: raw.updatedAt,
+});
